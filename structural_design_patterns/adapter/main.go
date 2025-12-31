@@ -1,0 +1,45 @@
+package main
+
+import "fmt"
+
+// HP usb type C -> casan HP (usb type A) -> (usb port type A) Adapter (steker)  -> stop kontak (steker port)
+
+type IUSBA interface {
+	useIUSBA()
+}
+
+type ISteker interface {
+	useSteker()
+}
+
+type CasanHP struct{}
+
+func (c CasanHP) useIUSBA() {
+	fmt.Println("kepala USB tipe A")
+}
+
+type Steker struct{}
+
+func (s Steker) useSteker() {
+	fmt.Println("Kepala Steker")
+}
+
+type usbaToStekerAdapter struct {
+	device IUSBA
+}
+
+func newAdapter(d IUSBA) usbaToStekerAdapter {
+	return usbaToStekerAdapter{device: d}
+}
+
+func (a usbaToStekerAdapter) useSteker() {
+	fmt.Println("menghubungkan USB tipe A ke Steker")
+	a.device.useIUSBA()
+	fmt.Println("tersambung ke steker 🚀🚀🚀")
+}
+
+func main() {
+	casan := CasanHP{}
+	adapter := newAdapter(casan)
+	adapter.useSteker()
+}
